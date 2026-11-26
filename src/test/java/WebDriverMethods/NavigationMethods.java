@@ -22,9 +22,5 @@ public class NavigationMethods {
             System.out.println(driver.getCurrentUrl());
 
             driver.navigate().refresh();
-
-
-
-
     }
 }
