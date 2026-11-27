@@ -9,41 +9,27 @@ import java.time.Duration;
 
 public class FrameHandling2 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         WebDriver driver = new ChromeDriver();
-
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        driver.get("https://ui.vision/demo/webtest/frames/");
         driver.manage().window().maximize();
-
-        WebElement frame1 = driver.findElement(By.xpath("//frame[@src='frame_1.html']"));
-
-        driver.switchTo().frame(frame1);
-
-        driver.findElement(By.xpath("//input[@name='mytext1']")).sendKeys("welcome");
-
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://qa.randomly.online/practice/frames");
+        Thread.sleep(3000);
+        String data=driver.findElement(By.xpath("//p[@class='mb-3 text-sm text-slate-600']")).getText();
+        System.out.println(data);
+        String accessCode = data.replace("Access code:", "").trim();
+        WebElement element= driver.findElement(By.xpath("//iframe[@id='practice-iframe']"));
+        driver.switchTo().frame(element);
+        driver.findElement(By.xpath("//input[@id=\"frame-input\"]")).sendKeys(accessCode);
+        driver.findElement(By.xpath("//button[@id=\"frame-submit\"]")).click();
+        Thread.sleep(2000);
         driver.switchTo().defaultContent();
 
-        WebElement frame2 = driver.findElement(By.xpath("//frame[@src='frame_2.html']"));
+        Thread.sleep(10000);
+        driver.findElement(By.id("btn-main-confirm")).click();
+        Thread.sleep(2000);
 
-        driver.switchTo().frame(frame2);
-
-        driver.findElement(By.xpath("//input[@name='mytext2']")).sendKeys("selenium");
-
-        driver.switchTo().defaultContent();
-
-        WebElement frame3 = driver.findElement(By.xpath("//frame[@src='frame_3.html']"));
-
-        driver.switchTo().frame(frame3);
-
-        driver.findElement(By.xpath("//input[@name='mytext3']")).sendKeys("Java");
-
-        driver.switchTo().frame(0);
-
-        driver.findElement(By.xpath("(//div[@role='radio'])[1]")).click();
-
-        driver.switchTo().defaultContent();
+        driver.quit();
     }
 }
